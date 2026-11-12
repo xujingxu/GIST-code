@@ -1,0 +1,88 @@
+experiment:
+  name: gist_multiscale_fusion
+  seed: 42
+  train_centers: [0, 2, 3, 5]
+  validation_centers: [1, 4]
+  classes: [0, 1, 2]
+  class_names: [low, intermediate, high]
+  bootstrap_replicates: 2000
+
+paths:
+  features: data/features/model_features.csv
+  predictions:
+    Fusion: data/predictions/fusion.csv
+    Radiomics-Clinical: data/predictions/radiomics_clinical.csv
+    Habitat-Clinical: data/predictions/habitat_clinical.csv
+    ITH-Clinical: data/predictions/ith_clinical.csv
+
+feature_sets:
+  Radiomics-Clinical: [radiomics_label, tumor_size, ulceration, invasion]
+  Habitat-Clinical: [habitat_label, tumor_size, ulceration, invasion]
+  ITH-Clinical: [ith_mean, tumor_size, ulceration, invasion]
+  Fusion: [fusion_habitat_label, fusion_rad_prob_0, fusion_rad_prob_1, fusion_rad_prob_2, ith_mean]
+
+mrmr:
+  variance_threshold: 0.01
+  correlation_threshold: 0.95
+  n_features: 22
+
+ith:
+  n_clusters: 6
+  repetitions: 10
+  connectivity: 2
+  min_area: 200
+  small_region_threshold: 1
+
+models:
+  Radiomics-Clinical:
+    type: xgboost
+    params:
+      n_estimators: 800
+      max_depth: 3
+      learning_rate: 0.0019471724423819983
+      subsample: 0.49446212181940696
+      colsample_bytree: 0.7495350734933346
+      gamma: 1.1638568816608175
+      min_child_weight: 2
+      reg_alpha: 0.00005485152564916338
+      reg_lambda: 0.0038576192960607246
+      eval_metric: mlogloss
+      n_jobs: 1
+  Habitat-Clinical:
+    type: xgboost
+    params:
+      n_estimators: 321
+      max_depth: 10
+      learning_rate: 0.005403297102372737
+      subsample: 0.6248295268763323
+      colsample_bytree: 0.6009148981473723
+      gamma: 0.8032793911745788
+      min_child_weight: 1
+      reg_alpha: 0.0074372436110430205
+      reg_lambda: 0.0004588593192279883
+      eval_metric: mlogloss
+      n_jobs: 1
+  ITH-Clinical:
+    type: svm
+    params:
+      C: 63.56895550068391
+      kernel: rbf
+      gamma: scale
+      tol: 0.001
+      decision_function_shape: ovr
+      class_weight: balanced
+      probability: true
+  Fusion:
+    type: xgboost
+    params:
+      n_estimators: 232
+      max_depth: 6
+      learning_rate: 0.016839185087572324
+      subsample: 0.6140694592116313
+      colsample_bytree: 0.5437821525449181
+      gamma: 1.7959404885306487
+      min_child_weight: 1
+      reg_alpha: 0.878025951044602
+      reg_lambda: 0.0007342839813643261
+      eval_metric: mlogloss
+      n_jobs: 1
