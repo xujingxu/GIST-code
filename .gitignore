@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+runs/
+.DS_Store
+*.pkl
+*.joblib
+*.pth
+.env
+# Never commit raw images, masks, clinical source tables, or identifier maps.
+*.nii
+*.nii.gz
+*.dcm
+*identifier*map*

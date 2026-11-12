@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gist-multiscale-fusion"
+version = "1.0.0"
+description = "Reproducible multiscale CT late-fusion models for three-class gastric GIST risk stratification"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = {text = "MIT"}
+authors = [{name = "The gGIST Study Group"}]
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.2,<4",
+  "scipy>=1.11,<2",
+  "scikit-learn>=1.5,<2",
+  "xgboost>=3.0,<4",
+  "joblib>=1.4,<2",
+  "PyYAML>=6.0,<7",
+]
+
+[project.optional-dependencies]
+imaging = [
+  "SimpleITK>=2.4,<3",
+  "pyradiomics==3.0.1",
+  "nibabel>=5.2,<6",
+  "tqdm>=4.66,<5",
+]
+mlp = ["torch>=2.2"]
+plot = ["matplotlib>=3.8,<4", "seaborn>=0.13,<1"]
+dev = ["pytest>=8,<9", "ruff>=0.8,<1"]
+
+[project.scripts]
+gist-fusion = "gist_fusion.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E501"]
